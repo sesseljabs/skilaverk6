@@ -21,11 +21,15 @@ class Dice:
         self.surf = pygame.image.load(path.join(img_location,img_name % self.number))
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)  # Gerir það transparent fyrir png mynd
         self.surf = pygame.transform.scale(self.surf,(100,100))
-        self.rect = self.surf.get_rect()
-        self.rect.move_ip(100,50)
+        self.rect = self.surf.get_rect(
+            center = (
+                SCREEN_WIDTH/6,
+                SCREEN_HEIGHT/4
+            )
+        )
 
     def __str__(self):
-        return f"{self.number}"
+        return str(self.number)
 
     def throw(self):
         self.number = random.randint(1,6)
@@ -39,6 +43,10 @@ class DiceThrower:
         self.dice_count = total
         self.dice = Dice()
         self.dice_list = [Dice() for i in range(self.dice_count)]
+        x = 0
+        for i in self.dice_list:
+            x += 1
+            i.rect = i.rect.move(x*100,0)
 
     def __str__(self):
         li = [i.number for i in self.dice_list]
@@ -74,10 +82,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 pygame.init()
 running = True
+drawn = False
 while running:
     for event in pygame.event.get():
         if event.type == QUIT:
-            running = False
+           running = False
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 running = False
@@ -87,11 +96,10 @@ while running:
     if keys_pressed[K_SPACE]:
         uwu.dice_list[2].throw()
 
+    for x in uwu.dice_list:
+        screen.blit(x.surf,x.rect)
+
     screen.fill((0, 255, 255))
-
-    #for i in uwu.dice_list:
-     #   screen.blit(i.surf,i.rect)
-    screen.blit(uwu.dice_list[2].surf,uwu.dice_list[2].rect)
+    x = 0
     pygame.display.flip()
-
     clock.tick(30)

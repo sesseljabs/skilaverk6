@@ -21,12 +21,12 @@ class Dice:
         self.surf = pygame.image.load(path.join(img_location,img_name % self.number))
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)  # Gerir það transparent fyrir png mynd
         self.surf = pygame.transform.scale(self.surf,(100,100))
-        self.rect = self.surf.get_rect(
-            center = (
-                SCREEN_WIDTH/6,
-                SCREEN_HEIGHT/4
-            )
-        )
+        # self.rect = self.surf.get_rect(
+        #     center = (
+        #         SCREEN_WIDTH/6,
+        #         SCREEN_HEIGHT/4
+        #     )
+        # )
 
     def __str__(self):
         return str(self.number)
@@ -43,11 +43,6 @@ class DiceThrower:
         self.dice_count = total
         self.dice = Dice()
         self.dice_list = [Dice() for i in range(self.dice_count)]
-        x = 0
-        for i in self.dice_list:
-            x += 1
-            i.rect = i.rect.move(x*100,0)
-
     def __str__(self):
         li = [i.number for i in self.dice_list]
         return str(li)
@@ -70,19 +65,20 @@ class DiceThrower:
         return total
 
 
-uwu = DiceThrower()
-print(uwu)
+dicethrower = DiceThrower()
+print(dicethrower)
 
-uwu.throw(4)
-print(uwu)
-uwu.throwlast()
-print(uwu)
-print(uwu.counttotal())
+dicethrower.throw(4)
+print(dicethrower)
+dicethrower.throwlast()
+print(dicethrower)
+print(dicethrower.counttotal())
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 pygame.init()
 running = True
 drawn = False
+dice = dicethrower.dice_list
 while running:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -94,12 +90,10 @@ while running:
     keys_pressed = pygame.key.get_pressed()
 
     if keys_pressed[K_SPACE]:
-        uwu.dice_list[2].throw()
-
-    for x in uwu.dice_list:
-        screen.blit(x.surf,x.rect)
+        dice[2].throw()
+    for x in range(0,5):
+        screen.blit(dice[x].surf, ((x+1)*60,0))
 
     screen.fill((0, 255, 255))
-    x = 0
     pygame.display.flip()
     clock.tick(30)

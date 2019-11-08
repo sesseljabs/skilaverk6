@@ -43,6 +43,7 @@ class DiceThrower:
         self.dice_count = total
         self.dice = Dice()
         self.dice_list = [Dice() for i in range(self.dice_count)]
+
     def __str__(self):
         li = [i.number for i in self.dice_list]
         return str(li)
@@ -73,12 +74,16 @@ print(dicethrower)
 dicethrower.throwlast()
 print(dicethrower)
 print(dicethrower.counttotal())
+
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 pygame.init()
 running = True
 drawn = False
 dice = dicethrower.dice_list
+uwu = Dice()
+uwu.throw()
 while running:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -89,6 +94,7 @@ while running:
 
     keys_pressed = pygame.key.get_pressed()
 
+    screen.blit(uwu.surf, (13,13))
     if keys_pressed[K_SPACE]:
         dice[2].throw()
     for x in range(0,5):
